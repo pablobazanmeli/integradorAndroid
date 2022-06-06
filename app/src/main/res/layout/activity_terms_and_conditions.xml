@@ -5,53 +5,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TermsAndConditions"
-    android:padding="16dp">
+    android:padding="40dp">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tittleTermsTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/terms_and_conditions_link"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/appNameTerms"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.051"
-        app:layout_constraintStart_toStartOf="@+id/scrollView2"
+        app:layout_constraintHorizontal_bias="0.237"
+        app:layout_constraintStart_toStartOf="@+id/termsScrollView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintVertical_bias="0.69" />
 
     <ImageButton
         android:id="@+id/closeTermsIB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="36dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:background="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toEndOf="@+id/tittleTermsTV"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/appNameTerms"
         style="@style/App_tittle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
         android:text="@string/app_name"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
-        app:layout_constraintEnd_toEndOf="@+id/scrollView2"
+        app:layout_constraintBottom_toTopOf="@+id/termsScrollView"
+        app:layout_constraintEnd_toEndOf="@+id/termsScrollView"
+        app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="409dp"
-        android:layout_height="459dp"
+        android:id="@+id/termsScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="513dp"
+        android:layout_marginBottom="52dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
+            android:id="@+id/allTermsTV"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:text="@string/termsAndConditionsDesc"
 
 
