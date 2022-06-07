@@ -38,8 +38,12 @@ class ListActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recycler)
 
         val adapter = ListAdapter(list) {
-            getDataFromServer(participants, it)
+            if(participants > 0)
+                getDataFromServer(participants, it)
+            else
+                getActivityByType(it)
         }
+
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
@@ -49,6 +53,24 @@ class ListActivity : AppCompatActivity() {
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder().baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create()).build()
+    }
+
+    private fun getActivityByType(type: String)
+    {
+        var typeToLower =type.lowercase()
+        CoroutineScope(Dispatchers.IO).launch {
+            val call =
+                getRetrofit().create(APIService::class.java).getActivityByType(typeToLower)
+            val response = call.body()
+            Log.d("SERVER", response.toString())
+            if (call.isSuccessful){
+                val detailIntent = Intent(this@ListActivity,DetailActivity::class.java)
+                detailIntent.putExtra("response",response)
+                detailIntent.putExtra("activitySelected", type)
+                startActivity(detailIntent)
+            }
+
+        }
     }
 
     private fun getDataFromServer(participants: Int, type: String) {
