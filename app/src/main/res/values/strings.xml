@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Not Bored</string>
-    <string name="terms_and_conditions_link"><u>Terms and conditions</u></string>
+    <string name="terms_and_conditions_link"><b><u>Terms and conditions</u></b></string>
+    <string name="terms_and_conditions_bold"><b>Terms and conditions</b></string>
     <string name="start_btn">Start</string>
-    <string name="participants">Participants</string>
+    <string name="participants"><b>Participants</b></string>
+
     <string name="termsAndConditionsDesc">Lorem ipsum dolor sit amet consectetur adipiscing elit inceptos ridiculus iaculis,
 nullam ligula elementum duis tellus maecenas nec fermentum sed dictum
 laoreet, taciti donec habitant quam purus ultricies porta posuere sociis. Cubilia
