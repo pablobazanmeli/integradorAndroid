@@ -5,6 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="@color/light_blue_app"
     tools:context=".MainActivity">
 
 
@@ -13,7 +15,7 @@
         style="@style/App_tittle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="130dp"
         android:text="@string/app_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,30 +26,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="TextView"
+        android:text="@string/participants"
         app:layout_constraintBottom_toTopOf="@+id/inputNumberET"
         app:layout_constraintStart_toStartOf="@+id/inputNumberET" />
 
     <EditText
         android:id="@+id/inputNumberET"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="176dp"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="160dp"
         android:ems="10"
-
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:background="@drawable/custom_edit_text"
         android:inputType="number"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toBottomOf="@+id/mainTitleTV" />
 
     <Button
         android:id="@+id/startBtn"
         style="@style/Button.blue_app"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="92dp"
-        android:text="Button"
+        android:layout_marginBottom="48dp"
+        android:text="@string/start_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/inputNumberET"
         app:layout_constraintStart_toStartOf="@+id/inputNumberET"
