@@ -21,7 +21,8 @@
             android:exported="false" />
         <activity
             android:name=".ListActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".TermsAndConditions"
             android:exported="false" />
