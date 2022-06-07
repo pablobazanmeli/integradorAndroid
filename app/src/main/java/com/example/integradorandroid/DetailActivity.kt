@@ -21,7 +21,12 @@ class DetailActivity : AppCompatActivity() {
         val activitySelected = intent.getSerializableExtra("activitySelected")
         title.text = response.activity
         participants.text = response.participants.toString()
-        price.text = response.price.toString()
+        price.text = when(response.price){
+            0F -> "FREE"
+            in 0F..0.3F -> "LOW"
+            in 0.3F..0.6F -> "MEDIUM"
+            else -> "HIGH"
+        }
         type.text = response.type
         selectedActivity.text =activitySelected.toString()
 
