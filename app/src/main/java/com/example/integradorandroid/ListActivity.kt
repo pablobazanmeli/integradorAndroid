@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.integradorandroid.adapter.ListAdapter
@@ -17,8 +16,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class ListActivity : AppCompatActivity() {
-    private val RANDOM_ACTIVITY ="Random"
-    private val list = mutableListOf<String>(
+    private val randomActivity ="Random"
+    private val list = mutableListOf(
         "Educational",
         "Recreational",
         "Social",
@@ -39,7 +38,7 @@ class ListActivity : AppCompatActivity() {
 
         val adapter = ListAdapter(list) {
             if(participants > 0)
-                getDataFromServer(participants, it)
+                getActivityByParticipantsAndType(participants, it)
             else
                 getActivityByType(it)
         }
@@ -57,7 +56,7 @@ class ListActivity : AppCompatActivity() {
 
     private fun getActivityByType(type: String)
     {
-        var typeToLower =type.lowercase()
+        val typeToLower =type.lowercase()
         CoroutineScope(Dispatchers.IO).launch {
             val call =
                 getRetrofit().create(APIService::class.java).getActivityByType(typeToLower)
@@ -73,11 +72,11 @@ class ListActivity : AppCompatActivity() {
         }
     }
 
-    private fun getDataFromServer(participants: Int, type: String) {
-        var typeToLower =type.lowercase()
+    private fun getActivityByParticipantsAndType(participants: Int, type: String) {
+        val typeToLower =type.lowercase()
         CoroutineScope(Dispatchers.IO).launch {
             val call =
-                getRetrofit().create(APIService::class.java).getDataFromServer(participants, typeToLower)
+                getRetrofit().create(APIService::class.java).getActivityByParticipantsAndType(participants, typeToLower)
             val response = call.body()
             Log.d("SERVER", response.toString())
             if (call.isSuccessful){
@@ -99,14 +98,14 @@ class ListActivity : AppCompatActivity() {
             if (call.isSuccessful){
                 val detailIntent = Intent(this@ListActivity,DetailActivity::class.java)
                 detailIntent.putExtra("response",response)
-                detailIntent.putExtra("activitySelected", RANDOM_ACTIVITY)
+                detailIntent.putExtra("activitySelected", randomActivity)
                 startActivity(detailIntent)
             }
 
         }
     }
 
-    fun selectRandomActivity(){
+    private fun selectRandomActivity(){
         val randomButton = findViewById<ImageButton>(R.id.randomActivityBt)
         randomButton.setOnClickListener {
             getRandomActivity()
