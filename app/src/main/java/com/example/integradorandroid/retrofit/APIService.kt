@@ -10,4 +10,7 @@ interface APIService {
 
     @GET("activity/")
     suspend fun getRandomActivity(): Response<BoredData>
+
+    @GET("activity")
+    suspend fun getActivityByType(@Query("type") type:String): Response<BoredData>
 }

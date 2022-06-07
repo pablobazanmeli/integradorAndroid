@@ -30,21 +30,21 @@ class MainActivity : AppCompatActivity() {
         val editText = findViewById<EditText>(R.id.inputNumberET)
         button.setOnClickListener{
             val participants = editText.text.toString()
-            if(participants.isNotEmpty() && participants.toInt()>0){
+            if(participants.isNotEmpty()){
                 getSharedPreferences("PREFS",MODE_PRIVATE).edit().putInt("PARTICIPANTS",participants.toInt()).apply()
                 changeToActivityListActivity()
             }
-            else
-            {
-                showSnackBar(this.findViewById(android.R.id.content), "Enter a number in Participants greater than 0")
+            else {
+                getSharedPreferences("PREFS",MODE_PRIVATE).edit().putInt("PARTICIPANTS",0).apply()
+                changeToActivityListActivity()
             }
         }
     }
 
-    private fun showSnackBar(view: View, message: String) {
-        val snack = Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
-        snack.show()
-    }
+//    private fun showSnackBar(view: View, message: String) {
+//        val snack = Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
+//        snack.show()
+//    }
 
     private fun changeToActivityListActivity() {
         val intent = Intent(this, ListActivity::class.java)
