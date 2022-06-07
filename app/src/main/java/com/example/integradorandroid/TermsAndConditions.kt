@@ -16,9 +16,7 @@ class TermsAndConditions : AppCompatActivity() {
     fun changeToActivityMain() {
         val linkTermsAndConditions = findViewById<ImageButton>(R.id.closeTermsIB)
         linkTermsAndConditions.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            //comment
+           finish()
         }
     }
 }
