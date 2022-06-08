@@ -6,5 +6,6 @@ data class BoredData(
     val activity: String,
     val type: String,
     val price: Float,
-    val participants: Int
+    val participants: Int,
+    val key: String
 ):Serializable
