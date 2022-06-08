@@ -27,6 +27,7 @@
                 android:paddingTop="4dp"
                 tools:text="toolsText"
                 android:background="@color/light_blue_app"/>
+
         </LinearLayout>
         <View
             android:layout_width="match_parent"

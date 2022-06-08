@@ -2,6 +2,7 @@ package com.example.integradorandroid
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -30,12 +31,13 @@ class MainActivity : AppCompatActivity() {
         val editText = findViewById<EditText>(R.id.inputNumberET)
         button.setOnClickListener{
             val participants = editText.text.toString()
+            Log.d("participants",participants)
             if(participants.isNotEmpty()){
-                getSharedPreferences("PREFS",MODE_PRIVATE).edit().putInt("PARTICIPANTS",participants.toInt()).apply()
+                getSharedPreferences("PREFS",MODE_PRIVATE).edit().putInt("PARTICIPANTS",participants.toInt()).commit()
                 changeToActivityListActivity()
             }
             else {
-                getSharedPreferences("PREFS",MODE_PRIVATE).edit().putInt("PARTICIPANTS",0).apply()
+                getSharedPreferences("PREFS",MODE_PRIVATE).edit().putInt("PARTICIPANTS",0).commit()
                 changeToActivityListActivity()
             }
         }

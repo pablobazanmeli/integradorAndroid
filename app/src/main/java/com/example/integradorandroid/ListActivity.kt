@@ -33,8 +33,8 @@ class ListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
-        val participants = getSharedPreferences("PREFS", MODE_PRIVATE).getInt("PARTICIPANTS", 1)
-
+        val participants = getSharedPreferences("PREFS", MODE_PRIVATE).getInt("PARTICIPANTS", 0)
+        Log.d("participants", participants.toString())
         val recyclerView = findViewById<RecyclerView>(R.id.recycler)
 
         val adapter = ListAdapter(list) {
@@ -63,20 +63,22 @@ class ListActivity : AppCompatActivity() {
             val response = call.body()
             Log.d("SERVER", response.toString())
             if (call.isSuccessful) {
-                when (response?.activity) {
-                    null -> Toast.makeText(
-                        this@ListActivity,
-                        "Doesn't exits activity for those number of participants",
-                        Toast.LENGTH_LONG
-                    ).show()
+                if (response?.activity == null) {
+                    runOnUiThread {
+                        Toast.makeText(
+                            this@ListActivity,
+                            "no exits activity $type for this request",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                } else {
+                    val detailIntent = Intent(this@ListActivity, DetailActivity::class.java)
+                    detailIntent.putExtra("response", response)
+                    detailIntent.putExtra("activitySelected", type)
+                    startActivity(detailIntent)
                 }
 
-               /* val detailIntent = Intent(this@ListActivity, DetailActivity::class.java)
-                detailIntent.putExtra("response", response)
-                detailIntent.putExtra("activitySelected", type)
-                startActivity(detailIntent)
 
-                */
             }
 
         }
@@ -84,45 +86,59 @@ class ListActivity : AppCompatActivity() {
     }
 
 
-private fun getActivityByParticipantsAndType(participants: Int, type: String) {
-    val typeToLower = type.lowercase()
-    CoroutineScope(Dispatchers.IO).launch {
-        val call =
-            getRetrofit().create(APIService::class.java)
-                .getActivityByParticipantsAndType(participants, typeToLower)
-        val response = call.body()
-        Log.d("SERVER", response.toString())
-        if (call.isSuccessful) {
-            val detailIntent = Intent(this@ListActivity, DetailActivity::class.java)
-            detailIntent.putExtra("response", response)
-            detailIntent.putExtra("activitySelected", type)
-            startActivity(detailIntent)
+    private fun getActivityByParticipantsAndType(participants: Int, type: String) {
+        val typeToLower = type.lowercase()
+        CoroutineScope(Dispatchers.IO).launch {
+            val call =
+                getRetrofit().create(APIService::class.java)
+                    .getActivityByParticipantsAndType(participants, typeToLower)
+            val response = call.body()
+            Log.d("SERVER", response.toString())
+            if (call.isSuccessful) {
+                if (response?.activity == null) {
+                    runOnUiThread {
+                        Toast.makeText(
+                            this@ListActivity,
+                            "no exits activity $type for $participants participants",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                } else {
+                    val detailIntent = Intent(this@ListActivity, DetailActivity::class.java)
+                    detailIntent.putExtra("response", response)
+                    detailIntent.putExtra("activitySelected", type)
+                    startActivity(detailIntent)
+                }
+
+
+            }
+
         }
 
-    }
-}
 
-private fun getRandomActivity() {
-    CoroutineScope(Dispatchers.IO).launch {
-        val call =
-            getRetrofit().create(APIService::class.java).getRandomActivity()
-        val response = call.body()
-        Log.d("SERVER", response.toString())
-        if (call.isSuccessful) {
-            val detailIntent = Intent(this@ListActivity, DetailActivity::class.java)
-            detailIntent.putExtra("response", response)
-            detailIntent.putExtra("activitySelected", randomActivity)
-            startActivity(detailIntent)
+    }
+
+    private fun getRandomActivity() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val call =
+                getRetrofit().create(APIService::class.java).getRandomActivity()
+            val response = call.body()
+            Log.d("SERVER", response.toString())
+            if (call.isSuccessful) {
+                val detailIntent = Intent(this@ListActivity, DetailActivity::class.java)
+                detailIntent.putExtra("response", response)
+                detailIntent.putExtra("activitySelected", randomActivity)
+                startActivity(detailIntent)
+            }
+
         }
-
     }
-}
 
-private fun selectRandomActivity() {
-    val randomButton = findViewById<ImageButton>(R.id.randomActivityBt)
-    randomButton.setOnClickListener {
-        getRandomActivity()
+    private fun selectRandomActivity() {
+        val randomButton = findViewById<ImageButton>(R.id.randomActivityBt)
+        randomButton.setOnClickListener {
+            getRandomActivity()
+        }
     }
-}
 
 }
