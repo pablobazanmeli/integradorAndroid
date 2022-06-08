@@ -17,12 +17,19 @@
             android:layout_height="match_parent"
 
             android:orientation="horizontal">
-
+            <ImageButton
+                android:id="@+id/listBackBt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="40dp"
+                app:srcCompat="@drawable/arrow_back_ios_48px"
+                android:background="@null"/>
             <TextView
                 android:id="@+id/activityListTittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="100dp"
+                android:layout_marginStart="50dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="50dp"
                 android:text="@string/activities"

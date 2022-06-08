@@ -30,9 +30,16 @@ class MainActivity : AppCompatActivity() {
         val editText = findViewById<EditText>(R.id.inputNumberET)
         button.setOnClickListener{
             val participants = editText.text.toString()
+
             if(participants.isNotEmpty()){
-                getSharedPreferences("PREFS",MODE_PRIVATE).edit().putInt("PARTICIPANTS",participants.toInt()).apply()
-                changeToActivityListActivity()
+                if (participants.toInt()>8) {
+                    showSnackBar(findViewById(R.id.activityMainConstraint), "The maximum number of participants is 8")
+                }
+                else {
+                    getSharedPreferences("PREFS",MODE_PRIVATE).edit().putInt("PARTICIPANTS",participants.toInt()).apply()
+                    changeToActivityListActivity()
+                }
+
             }
             else {
                 getSharedPreferences("PREFS",MODE_PRIVATE).edit().putInt("PARTICIPANTS",0).apply()
@@ -41,10 +48,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    private fun showSnackBar(view: View, message: String) {
-//        val snack = Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
-//        snack.show()
-//    }
+   private fun showSnackBar(view: View, message: String) {
+       val snack = Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
+       snack.show()
+    }
 
     private fun changeToActivityListActivity() {
         val intent = Intent(this, ListActivity::class.java)

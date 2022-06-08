@@ -20,18 +20,21 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class DetailActivity : AppCompatActivity() {
-    val activities  = mutableSetOf<BoredData>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-        val response = intent.getSerializableExtra("response") as BoredData
-        val activitySelected = intent.getSerializableExtra("activitySelected")
-        val apiCall = intent.getSerializableExtra("apiCall")
+        //val response = intent.getSerializableExtra("response") as BoredData
+        val participants = getSharedPreferences("PREFS", MODE_PRIVATE).getInt("PARTICIPANTS", 1)
+        val activitySelected = intent.getSerializableExtra("activitySelected").toString()
+        //val apiCall = intent.getSerializableExtra("apiCall")
         val selectedActivity =findViewById<TextView>(R.id.activityTypeTV)
         selectedActivity.text =activitySelected.toString()
-        renderActivity(response)
+        getActivity(activitySelected,participants )
+        //renderActivity(response)
         onBackButtonClick()
-        onClickTryAnother(response, apiCall.toString())
+        onClickTryAnother(activitySelected, participants)
 
     }
 /**
@@ -61,52 +64,47 @@ class DetailActivity : AppCompatActivity() {
     fun onBackButtonClick(){
         val backButton = findViewById<ImageButton>(R.id.detailBackBt)
         backButton.setOnClickListener {
-            activities.clear()
             finish()
         }
     }
 
-    fun onClickTryAnother(response: BoredData, apiCall :String ){
+    fun onClickTryAnother( activitySelected: String,participants: Int,){
 
         val tryAnotherBt =findViewById<Button>(R.id.tryAnotherBT)
 
         tryAnotherBt.setOnClickListener {
-            getActivity(apiCall, response)
+            getActivity(activitySelected, participants )
         }
     }
-    //TODO control response on this activity
-    private fun getActivity(apiCall: String, response:BoredData) {
-        val activities  = mutableSetOf<BoredData>()
-        activities.add(response)
 
+    private fun getActivity(activitySelected :String, participants :Int) {
+        val participantsShared: Int? = if (participants==0)null else participants
+        val activitySelectedSafe: String? = if (activitySelected=="Random") null else activitySelected
         CoroutineScope(Dispatchers.IO).launch {
-        var call=getRetrofit().create(APIService::class.java).getRandomActivity()
-        when(apiCall){
-            ApiCall.RANDOM_ACTIVITY.toString()->call=getRetrofit().create(APIService::class.java).getRandomActivity()
-            ApiCall.TYPE_AND_PARTICIPANTS_CALL.toString()->call=getRetrofit().create(APIService::class.java).getActivityByParticipantsAndType(response.participants, response.type.lowercase())
-            ApiCall.TYPE_ACTIVITY_CALL.toString()->call=getRetrofit().create(APIService::class.java).getActivityByType(response.type.lowercase())
-        }
+            var call: Response<BoredData> = getRetrofit().create(APIService::class.java).getActivityCall(
+                participantsShared,
+                activitySelectedSafe?.lowercase()
+            )
+            if (call.isSuccessful) {
+                val res = call.body() as BoredData
+                if (res.key != null) {
 
-            val res = call.body() as BoredData
-            val activity = activities.find { it.key == res.key }
-            if (call.isSuccessful && activity==null) {
-                println(activities)
-                activities.add(res)
-                createActivity(res)
-                println("success!!! ")
-                println("res key "+res.key)
-                println("response key "+response?.key)
-                Log.d("SERVER", res.toString())
-            } else {
-                showSnackBar(findViewById(R.id.detailConstraint), "Same activity, try again!")
-                Log.d("SERVER", res.toString())
+                    Log.d("SERVER", res.toString())
+                    runOnUiThread {
+                        renderActivity(res)
+                    }
+                }else {
+
+                    runOnUiThread {
+                        val noActivityText = findViewById<TextView>(R.id.noActivityTv)
+                        noActivityText.visibility=View.VISIBLE
+                    }
+                    Log.d("SERVER", res.toString())
+
+                }
             }
         }
 
-    }
-
-    private fun createActivity(response: BoredData) :BoredData{
-        return response
     }
 
 
