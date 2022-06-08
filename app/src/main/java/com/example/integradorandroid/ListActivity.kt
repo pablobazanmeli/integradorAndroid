@@ -62,10 +62,11 @@ class ListActivity : AppCompatActivity() {
                 getRetrofit().create(APIService::class.java).getActivityByType(typeToLower)
             val response = call.body()
             Log.d("SERVER", response.toString())
-            if (call.isSuccessful){
+            if (call.isSuccessful && response?.key!=null){
                 val detailIntent = Intent(this@ListActivity,DetailActivity::class.java)
                 detailIntent.putExtra("response",response)
                 detailIntent.putExtra("activitySelected", type)
+                detailIntent.putExtra("apiCall", ApiCall.TYPE_ACTIVITY_CALL)
                 startActivity(detailIntent)
             }
 
@@ -79,10 +80,11 @@ class ListActivity : AppCompatActivity() {
                 getRetrofit().create(APIService::class.java).getActivityByParticipantsAndType(participants, typeToLower)
             val response = call.body()
             Log.d("SERVER", response.toString())
-            if (call.isSuccessful){
+            if (call.isSuccessful && response?.key!=null){
                 val detailIntent = Intent(this@ListActivity,DetailActivity::class.java)
                 detailIntent.putExtra("response",response)
                 detailIntent.putExtra("activitySelected", type)
+                detailIntent.putExtra("apiCall", ApiCall.TYPE_AND_PARTICIPANTS_CALL)
                 startActivity(detailIntent)
             }
 
@@ -95,10 +97,11 @@ class ListActivity : AppCompatActivity() {
                 getRetrofit().create(APIService::class.java).getRandomActivity()
             val response = call.body()
             Log.d("SERVER", response.toString())
-            if (call.isSuccessful){
+            if (call.isSuccessful && response?.key!=null){
                 val detailIntent = Intent(this@ListActivity,DetailActivity::class.java)
                 detailIntent.putExtra("response",response)
                 detailIntent.putExtra("activitySelected", randomActivity)
+                detailIntent.putExtra("apiCall", ApiCall.RANDOM_ACTIVITY)
                 startActivity(detailIntent)
             }
 
