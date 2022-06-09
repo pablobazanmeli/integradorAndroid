@@ -4,10 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.integradorandroid.retrofit.APIService
 import com.example.integradorandroid.retrofit.BoredData
@@ -49,7 +46,7 @@ class DetailActivity : AppCompatActivity() {
         val participantsTV = findViewById<TextView>(R.id.textParticipants)
         val priceTV = findViewById<TextView>(R.id.textPrice)
         val activityTypeTV = findViewById<TextView>(R.id.textType)
-        val activityTypeText = findViewById<TextView>(R.id.textView4)
+        val activityTypeImage = findViewById<ImageView>(R.id.imgView4)
         titleTV.text = response.activity
         participantsTV.text = response.participants.toString()
         priceTV.text = determinePrice(response.price)
@@ -58,7 +55,7 @@ class DetailActivity : AppCompatActivity() {
             activityTypeTV.visibility= View.VISIBLE
         }else {
             activityTypeTV.visibility=View.INVISIBLE
-            activityTypeText.visibility=View.INVISIBLE
+            activityTypeImage.visibility=View.INVISIBLE
         }
 
 
@@ -168,10 +165,10 @@ class DetailActivity : AppCompatActivity() {
 
     private fun determinePrice(price: Float): String {
         return when {
-            (price >= 0.6F) -> "HIGH"
-            (price >= 0.3F) -> "MEDIUM"
-            (price > 0F) -> "LOW"
-            else -> "FREE"
+            (price >= 0.6F) -> "High"
+            (price >= 0.3F) -> "Medium"
+            (price > 0F) -> "Low"
+            else -> "Free!"
         }
     }
 

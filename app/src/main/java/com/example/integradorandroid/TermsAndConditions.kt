@@ -13,7 +13,7 @@ class TermsAndConditions : AppCompatActivity() {
         changeToActivityMain()
     }
 
-    fun changeToActivityMain() {
+    private fun changeToActivityMain() {
         val linkTermsAndConditions = findViewById<ImageButton>(R.id.closeTermsIB)
         linkTermsAndConditions.setOnClickListener {
            finish()
