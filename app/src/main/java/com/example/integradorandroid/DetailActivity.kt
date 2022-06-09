@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.integradorandroid.retrofit.APIService
@@ -28,6 +29,7 @@ class DetailActivity : AppCompatActivity() {
         //val response = intent.getSerializableExtra("response") as BoredData
         val participants = getSharedPreferences("PREFS", MODE_PRIVATE).getInt("PARTICIPANTS", 1)
         val activitySelected = intent.getSerializableExtra("activitySelected").toString()
+        tryAnotherActivity()
         //val apiCall = intent.getSerializableExtra("apiCall")
         val selectedActivity =findViewById<TextView>(R.id.activityTypeTV)
         selectedActivity.text =activitySelected.toString()
@@ -47,7 +49,7 @@ class DetailActivity : AppCompatActivity() {
         val activityTypeTV = findViewById<TextView>(R.id.textType)
         titleTV.text = response.activity
         participantsTV.text = response.participants.toString()
-        priceTV.text = response.price.toString()
+        priceTV.text = determinePrice(response.price)
         activityTypeTV.text = response.type
 
     }
@@ -61,14 +63,14 @@ class DetailActivity : AppCompatActivity() {
     /**
      *Function that stops the currently-running activity
      * */
-    fun onBackButtonClick(){
+    private fun onBackButtonClick(){
         val backButton = findViewById<ImageButton>(R.id.detailBackBt)
         backButton.setOnClickListener {
             finish()
         }
     }
 
-    fun onClickTryAnother( activitySelected: String,participants: Int,){
+    private fun onClickTryAnother(activitySelected: String, participants: Int,){
 
         val tryAnotherBt =findViewById<Button>(R.id.tryAnotherBT)
 
@@ -78,26 +80,31 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun getActivity(activitySelected :String, participants :Int) {
+
+        showDetails(false)
+        showNoActivity(false)
+        showLoadingProgressBar(true)
+
         val participantsShared: Int? = if (participants==0)null else participants
         val activitySelectedSafe: String? = if (activitySelected=="Random") null else activitySelected
         CoroutineScope(Dispatchers.IO).launch {
-            var call: Response<BoredData> = getRetrofit().create(APIService::class.java).getActivityCall(
+            val call: Response<BoredData> = getRetrofit().create(APIService::class.java).getActivityCall(
                 participantsShared,
                 activitySelectedSafe?.lowercase()
             )
             if (call.isSuccessful) {
                 val res = call.body() as BoredData
                 if (res.key != null) {
-
                     Log.d("SERVER", res.toString())
                     runOnUiThread {
+                        showDetails(true)
+                        showLoadingProgressBar(false)
                         renderActivity(res)
                     }
                 }else {
-
                     runOnUiThread {
-                        val noActivityText = findViewById<TextView>(R.id.noActivityTv)
-                        noActivityText.visibility=View.VISIBLE
+                        showNoActivity(true)
+                        showLoadingProgressBar(false)
                     }
                     Log.d("SERVER", res.toString())
 
@@ -107,9 +114,56 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
+    private fun showLoadingProgressBar(show : Boolean){
+        val loading = findViewById<ProgressBar>(R.id.loadingPB)
 
-    private fun showSnackBar(view: View, message: String) {
-      val snack = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-      snack.show()
-  }
+        if (show){
+            loading.visibility = View.VISIBLE
+        }
+        else{
+            loading.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun showDetails(show: Boolean){
+        val details = findViewById<View>(R.id.detailSV)
+        if (show){
+            details.visibility = View.VISIBLE
+        }
+        else{
+            details.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun showNoActivity(show: Boolean){
+        val noActivity = findViewById<View>(R.id.noActivityTv)
+        val tryAnotherActivity = findViewById<Button>(R.id.tryAnotherActivityBtn)
+        if (show){
+            noActivity.visibility = View.VISIBLE
+            tryAnotherActivity.visibility = View.VISIBLE
+        }
+        else{
+            noActivity.visibility = View.INVISIBLE
+            tryAnotherActivity.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun tryAnotherActivity(){
+        val tryAnotherActivity = findViewById<Button>(R.id.tryAnotherActivityBtn)
+        tryAnotherActivity.setOnClickListener {
+           finish()
+        }
+    }
+
+    private fun determinePrice(price: Float): String {
+        return when {
+            (price >= 0.6F) -> "HIGH"
+            (price >= 0.3F) -> "MEDIUM"
+            (price > 0F) -> "LOW"
+            else -> "FREE"
+        }
+    }
+
+
+
 }

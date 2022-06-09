@@ -9,5 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue_app">#4472CA</color>
     <color name="app_background_color">#CFDEE7</color>
-    <color name="light_blue_app">#BCF7FB</color>
+    <color name="light_blue_app">#CFDEE7</color>
 </resources>

@@ -18,14 +18,12 @@ class MainActivity : AppCompatActivity() {
         startListActivity()
     }
 
-
-
+    /**
+    This function will open the ListActivity
+    in case the value entered in Participants is less than 9,
+    otherwise it will display a snack bar with an error message.
+     */
     private fun startListActivity() {
-        /**
-         * This function will open the ListActivity in case the EditText
-         * is not empty and the number entered is greater than 0,
-         * otherwise it will display a SnackBar with the error message
-         */
        val button=findViewById<Button>(R.id.startBtn)
         val editText = findViewById<EditText>(R.id.inputNumberET)
         button.setOnClickListener{
@@ -39,7 +37,6 @@ class MainActivity : AppCompatActivity() {
                     getSharedPreferences("PREFS",MODE_PRIVATE).edit().putInt("PARTICIPANTS",participants.toInt()).apply()
                     changeToActivityListActivity()
                 }
-
             }
             else {
                 getSharedPreferences("PREFS",MODE_PRIVATE).edit().putInt("PARTICIPANTS",0).apply()
