@@ -27,7 +27,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         //val response = intent.getSerializableExtra("response") as BoredData
-        val participants = getSharedPreferences("PREFS", MODE_PRIVATE).getInt("PARTICIPANTS", 1)
+        val participants = getSharedPreferences("PREFS", MODE_PRIVATE).getInt("PARTICIPANTS", 0)
         val activitySelected = intent.getSerializableExtra("activitySelected").toString()
         tryAnotherActivity()
         //val apiCall = intent.getSerializableExtra("apiCall")
